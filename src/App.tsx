@@ -15,18 +15,13 @@ import { MarketPage } from './pages/MarketPage';
 function App() {
   return (
     <BrowserRouter>
-      {}
       <div className="d-flex flex-column min-vh-100">
-        
-        {}
+    
         <Header />
-
-        {}
         <main className="container py-4 flex-grow-1">
           
           {/* Define as rotas da aplicação */}
           <Routes>
-            {}
             <Route path="/" element={<HomePage />} />
             <Route path="/buscar" element={<SearchPage />} />
             <Route path="/mercado" element={<MarketPage />} />
@@ -35,8 +30,7 @@ function App() {
             <Route path="*" element={<h2>Página não encontrada (404)</h2>} />
           </Routes>
         </main>
-
-        {}
+        
         <Footer />
       </div>
     </BrowserRouter>

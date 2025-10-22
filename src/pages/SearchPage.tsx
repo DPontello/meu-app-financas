@@ -1,5 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { searchSymbols, ApiSearchResult } from '../services/api';
+import { Link } from 'react-router-dom'; 
 
 export const SearchPage = () => {
 
@@ -46,7 +47,6 @@ export const SearchPage = () => {
   return (
     <div>
       <h2 className="mb-4">Buscar por Ação</h2>
-
       <form onSubmit={handleSearch}>
         <div className="input-group mb-3">
           <input
@@ -55,7 +55,7 @@ export const SearchPage = () => {
             placeholder="Digite o símbolo ou nome da empresa (ex: AAPL, Microsoft, PETR4...)"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            disabled={isLoading} 
+            disabled={isLoading}
           />
           <button
             className="btn btn-primary"
@@ -89,22 +89,23 @@ export const SearchPage = () => {
         {results.length > 0 && !error && (
           <div>
             <h3>Resultados da Busca</h3>
-            <ul className="list-group">
+            <div className="list-group">
               {results.map((item) => (
-                <li 
-                  key={item['1. symbol']} 
-                  className="list-group-item d-flex justify-content-between align-items-center"
+                <Link
+                  key={item['1. symbol']}
+                  to={`/stock/${item['1. symbol']}`}
+                  className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
                 >
                   <div>
-                    <h5 className="mb-0">{item['1. symbol']}</h5>
+                    <h5 className="mb-0 text-primary">{item['1. symbol']}</h5>
                     <small className="text-muted">{item['2. name']}</small>
                   </div>
                   <span className="badge bg-secondary rounded-pill">
                     {item['4. region']}
                   </span>
-                </li>
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </div>

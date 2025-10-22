@@ -92,4 +92,82 @@ export const getMarketOverview = async (): Promise<ApiMarketOverview> => {
     console.error("Erro ao buscar dados do mercado:", error);
     throw error;
   }
+}
+// Interface para o GLOBAL QUOTE (Cotação)
+export interface ApiQuote {
+  '01. symbol': string;
+  '05. price': string;
+  '09. change': string;
+  '10. change percent': string;
+}
+
+// Interface para o OVERVIEW (Descrição)
+export interface ApiOverview {
+  Symbol: string;
+  Name: string;
+  Description: string;
+  Sector: string;
+  Industry: string;
+  MarketCapitalization: string;
+  PERatio: string; 
+  DividendYield: string;
+}
+
+// Função para buscar o PREÇO ATUAL (Global Quote)
+export const getStockQuote = async (symbol: string): Promise<ApiQuote> => {
+  if (!API_KEY) {
+    throw new Error("Chave da API (API_KEY) não encontrada.");
+  }
+
+  const url = `${BASE_URL}?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Erro na API: ${response.statusText}`);
+
+    const data = await response.json();
+    if (data.Note || data.Information) throw new Error(data.Note || data.Information);
+    
+    if (data['Global Quote']) {
+      return data['Global Quote'];
+    }
+
+    if (Object.keys(data).length === 0) {
+      throw new Error("Nenhum dado de cotação encontrado para este símbolo.");
+    }
+
+    throw new Error("Formato de resposta inesperado para Cotação.");
+
+  } catch (error) {
+    console.error("Erro ao buscar cotação:", error);
+    throw error;
+  }
+};
+
+
+// Função para buscar a DESCRIÇÃO (Overview)
+export const getStockOverview = async (symbol: string): Promise<ApiOverview> => {
+  if (!API_KEY) {
+    throw new Error("Chave da API (API_KEY) não encontrada.");
+  }
+
+  const url = `${BASE_URL}?function=OVERVIEW&symbol=${symbol}&apikey=${API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Erro na API: ${response.statusText}`);
+    
+    const data = await response.json();
+    if (data.Note || data.Information) throw new Error(data.Note || data.Information);
+
+    if (!data.Symbol) {
+       throw new Error("Nenhuma informação (overview) encontrada para este símbolo.");
+    }
+    
+    return data;
+
+  } catch (error) {
+    console.error("Erro ao buscar overview:", error);
+    throw error;
+  }
 };

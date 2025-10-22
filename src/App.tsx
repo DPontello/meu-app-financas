@@ -10,6 +10,7 @@ import { Footer } from './components/Footer/Footer';
 import { HomePage } from './pages/HomePage';
 import { SearchPage } from './pages/SearchPage';
 import { MarketPage } from './pages/MarketPage';
+import { StockDetailPage } from './pages/StockDetailPage';
 
 
 function App() {
@@ -25,9 +26,10 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/buscar" element={<SearchPage />} />
             <Route path="/mercado" element={<MarketPage />} />
-            
+            <Route path="/stock/:symbol" element={<StockDetailPage />} />
+          
             {/* Rota "Coringa" para páginas não encontradas */}
-            <Route path="*" element={<h2>Página não encontrada (404)</h2>} />
+            <Route path="*" element={<h2>Página não encontrada (404)</h2>} />   
           </Routes>
         </main>
         

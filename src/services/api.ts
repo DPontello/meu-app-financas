@@ -13,6 +13,22 @@ export interface ApiSearchResult {
   "9. matchScore": string;
 }
 
+export interface ApiTickerItem {
+  ticker: string;
+  price: string;
+  change_amount: string;
+  change_percentage: string;
+  volume: string;
+}
+
+export interface ApiMarketOverview {
+  top_gainers: ApiTickerItem[];
+  top_losers: ApiTickerItem[];
+  most_actively_traded: ApiTickerItem[];
+  metadata: string;
+  last_updated: string;
+}
+
 export const searchSymbols = async (keywords: string): Promise<ApiSearchResult[]> => {
   // verifica se a chave da API foi carregada
   if (!API_KEY) {
@@ -44,6 +60,36 @@ export const searchSymbols = async (keywords: string): Promise<ApiSearchResult[]
     return [];
   } catch (error) {
     console.error("Erro ao buscar dados da API:", error);
+    throw error;
+  }
+}
+
+export const getMarketOverview = async (): Promise<ApiMarketOverview> => {
+  if (!API_KEY) {
+    throw new Error("Chave da API (API_KEY) não encontrada. Verifique o .env");
+  }
+
+  // Usamos a função TOP_GAINERS_LOSERS da API
+  const url = `${BASE_URL}?function=TOP_GAINERS_LOSERS&apikey=${API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Erro na API: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    // Verificação de limite de API (muito importante para esta função)
+    if (data.Note || data.Information) {
+      throw new Error(data.Note || data.Information);
+    }
+
+    // A API retorna os dados diretamente no objeto principal
+    return data;
+
+  } catch (error) {
+    console.error("Erro ao buscar dados do mercado:", error);
     throw error;
   }
 };

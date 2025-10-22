@@ -1,46 +1,115 @@
-# Getting Started with Create React App
+# FinApp
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplicação web para consulta de informações do mercado de ações, permitindo a busca por empresas e a visualização de dados de mercado e cotações em tempo real.
 
-## Available Scripts
+🔗 **Deploy:** [(https://vercel.com/dpontellos-projects/meu-app-financas)]
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Tecnologias Utilizadas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React** v18+
+- **TypeScript**
+- **React Router** v6 (para roteamento)
+- **Bootstrap** v5.3+ (para layout e responsividade)
+- **SASS / SCSS** (para estilização customizada)
+- **Git** (para controle de versão)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## API
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+O projeto utiliza a **API da Alpha Vantage** para obter dados financeiros, cotações e informações de empresas.
 
-### `npm run build`
+- **Documentação:** [https://www.alphavantage.co/documentation/](https://www.alphavantage.co/documentation/)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Funções da API Utilizadas
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- `SYMBOL_SEARCH`: Para buscar símbolos de ações por nome ou ticker (usado na Página de Busca).
+- `TOP_GAINERS_LOSERS`: Para exibir as principais altas, baixas e mais negociadas (usado na Página de Mercado).
+- `GLOBAL_QUOTE`: Para obter o preço atual, variação diária e percentual de uma ação específica (usado na Página de Detalhes).
+- `OVERVIEW`: Para obter a descrição, setor, indústria e dados fundamentalistas da empresa (usado na Página de Detalhes).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## Estrutura do Projeto
+/src
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+├── /components # Componentes reutilizáveis (Header, Footer)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+├── /pages # Páginas/rotas da aplicação
+  ── HomePage.tsx
+  ── SearchPage.tsx
+  ── MarketPage.tsx
+  ── StockDetailPage.tsx
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+├── /services # Módulo central de comunicação com a API
+  ── api.ts
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+├── /styles # Arquivos SASS/SCSS globais
+  ── main.scss
 
-## Learn More
+├── App.tsx # Roteador principal da aplicação
+ ── index.tsx # Ponto de entrada (configuração do Bootstrap)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+## Funcionalidades
+
+- **Layout Responsivo:** Adapta-se a todos os tamanhos de tela (mobile, tablet, desktop) utilizando breakpoints do Bootstrap 5.
+- **Componentização:** `Header` e `Footer` são componentes separados e reutilizados em todas as páginas.
+- **Navegação (4 Rotas):**
+  - `/` (Home): Página inicial de apresentação.
+  - `/buscar` (Busca): Página interativa de busca.
+  - `/mercado` (Visão Geral): Página com dados do mercado (Top Gainers/Losers).
+  - `/stock/:symbol` (Detalhes): Rota dinâmica que exibe informações detalhadas de uma ação específica (ex: `/stock/PETR4.SAO`).
+
+### Busca de Ações (SearchPage)
+
+- Permite ao usuário buscar ações por símbolo (ex: `AAPL`, `PETR4`) ou nome (`Microsoft`).
+- Tratamento de estado de loading durante a requisição.
+- Exibição de mensagens de erro (ex: limite de API atingido) ou nenhum resultado.
+- Resultados da busca são links que levam à página de detalhes.
+
+### Visão Geral do Mercado (MarketPage)
+
+- Carrega dados automaticamente ao abrir a página (`useEffect`).
+- Exibe tabelas responsivas (`table-responsive`) para "Principais Altas", "Principais Baixas" e "Mais Negociadas".
+- Informa ao usuário que os dados se referem ao mercado dos EUA (limitação da API).
+
+### Página de Detalhes da Ação (StockDetailPage)
+
+- Utiliza `useParams` para ler o símbolo da ação da URL.
+- Dispara múltiplas chamadas de API em paralelo (`Promise.all`) para buscar preço (`GLOBAL_QUOTE`) e descrição (`OVERVIEW`) simultaneamente.
+- Exibe o preço, a variação (com cores dinâmicas), a descrição completa da empresa e um card com dados fundamentalistas (P/E, Valor de Mercado, etc.).
+
+---
+
+## Como Rodar o Projeto Localmente
+
+1. Clone este repositório:
+
+```bash
+git clone https://github.com/DPontello/meu-app-financas.git
+
+cd meu-app-financas
+npm install  
+
+```
+2. Navegue até a pasta do projeto e instale as dependências:
+
+```bash
+cd meu-app-financas
+npm install
+
+```
+3. Crie um arquivo .env na raiz do projeto (mesma pasta do package.json) e adicione sua chave da Alpha Vantage:
+```
+REACT_APP_ALPHAVANTAGE_API_KEY=SUA_CHAVE_PESSOAL_AQUI
+```
+4. Inicie o servidor de desenvolvimento:
+```bash
+npm start
+```
+

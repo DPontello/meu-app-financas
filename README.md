@@ -2,7 +2,7 @@
 
 Aplicação web para consulta de informações do mercado de ações, permitindo a busca por empresas e a visualização de dados de mercado e cotações em tempo real.
 
-🔗 **Deploy:** [(https://vercel.com/dpontellos-projects/meu-app-financas)]
+🔗 **Deploy:** [([https://vercel.com/dpontellos-projects/meu-app-financas](https://meu-app-financas-nine.vercel.app/))]
 
 ---
 
@@ -10,10 +10,10 @@ Aplicação web para consulta de informações do mercado de ações, permitindo
 
 - **React** v18+
 - **TypeScript**
-- **React Router** v6 (para roteamento)
-- **Bootstrap** v5.3+ (para layout e responsividade)
-- **SASS / SCSS** (para estilização customizada)
-- **Git** (para controle de versão)
+- **React Router** v6 
+- **Bootstrap** v5.3+ 
+- **SASS / SCSS**
+- **Git** 
 
 ---
 
@@ -35,7 +35,9 @@ O projeto utiliza a **API da Alpha Vantage** para obter dados financeiros, cota�
 ## Estrutura do Projeto
 /src
 
-├── /components # Componentes reutilizáveis (Header, Footer)
+├── /components # Componentes reutilizáveis (Header, Footer) # Componentes reutilizáveis (Header, Footer)
+
+├──/hooks # Hooks customizados (useDebounce.ts)
 
 ├── /pages # Páginas/rotas da aplicação
   ── HomePage.tsx
@@ -92,9 +94,6 @@ O projeto utiliza a **API da Alpha Vantage** para obter dados financeiros, cota�
 
 ```bash
 git clone https://github.com/DPontello/meu-app-financas.git
-
-cd meu-app-financas
-npm install  
 
 ```
 2. Navegue até a pasta do projeto e instale as dependências:

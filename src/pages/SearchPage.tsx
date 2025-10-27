@@ -1,82 +1,61 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { searchSymbols, ApiSearchResult } from '../services/api';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
+import { useDebounce } from '../hooks/useDebounce';
 
 export const SearchPage = () => {
-
-  // Guarda o valor do campo de busca (o que o usuário digita)
   const [query, setQuery] = useState<string>('');
-
-  // Guarda os resultados que vêm da API
   const [results, setResults] = useState<ApiSearchResult[]>([]);
-
-  // Controla se esta no meio de uma requisição (para mostrar loading)
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // Guarda qualquer mensagem de erro (ex: limite da API estourado)
   const [error, setError] = useState<string | null>(null);
-  
-  // Controla se uma busca já foi feita (para mostrar "nenhum resultado")
   const [hasSearched, setHasSearched] = useState<boolean>(false);
-
-  // Esta função é chamada quando o formulário é enviado (submit)
-  const handleSearch = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!query.trim()) {
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    setResults([]); 
-    setHasSearched(true); 
-
+  const debouncedQuery = useDebounce(query, 500);
   
-    try {
-      const data = await searchSymbols(query);
-      setResults(data);
-
-    } catch (err: any) {
-      setError(err.message || 'Ocorreu um erro desconhecido.');
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    const performSearch = async () => {
+      setIsLoading(true);
+      setError(null);
+      setHasSearched(true);
+      try {
+        const data = await searchSymbols(debouncedQuery);
+        setResults(data);
+      } catch (err: any) {
+        setError(err.message || 'Ocorreu um erro desconhecido.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (debouncedQuery.trim()) {
+      performSearch();
+    } else {
+      setResults([]);
+      setError(null);
+      setHasSearched(false);
     }
-  };
-
+  }, [debouncedQuery]);
   return (
     <div>
       <h2 className="mb-4">Buscar por Ação</h2>
-      <form onSubmit={handleSearch}>
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Digite o símbolo ou nome da empresa (ex: AAPL, Microsoft, PETR4...)"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            disabled={isLoading}
-          />
-          <button
-            className="btn btn-primary"
-            type="submit"
-            disabled={isLoading} 
+      <div className="mb-3 position-relative">
+        <input
+          type="text"
+          className="form-control form-control-lg"
+          placeholder="Digite o símbolo ou nome da empresa (ex: AAPL, Microsoft, PETR4...)"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          disabled={isLoading}
+        />
+        {isLoading && (
+          <div
+            className="spinner-border text-primary position-absolute"
+            role="status"
+            style={{ top: '12px', right: '16px' }}
           >
-            {isLoading ? (
-              <>
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span className="visually-hidden">Carregando...</span>
-              </>
-            ) : (
-              'Buscar'
-            )}
-          </button>
-        </div>
-      </form>
+            <span className="visually-hidden">Carregando...</span>
+          </div>
+        )}
+      </div>
       <div className="mt-4">
         {error && (
           <div className="alert alert-danger">
@@ -84,7 +63,9 @@ export const SearchPage = () => {
           </div>
         )}
         {hasSearched && !isLoading && !error && results.length === 0 && (
-          <p className="text-muted">Nenhum resultado encontrado para "{query}".</p>
+          <p className="text-muted">
+            Nenhum resultado encontrado para "{debouncedQuery}".
+          </p>
         )}
         {results.length > 0 && !error && (
           <div>
@@ -112,3 +93,4 @@ export const SearchPage = () => {
     </div>
   );
 };
+

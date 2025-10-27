@@ -1,5 +1,63 @@
-@import "~bootstrap/scss/bootstrap";
+$primary: #00bfa5;
+$secondary: #6c757d;
+$body-bg: #1a1e23; 
+$body-color: #f8f9fa; 
+$light: #2c323a;
+$dark: #121417;
+$text-muted: #aaa; 
+$border-color: #3e444a;
 
+@import "~bootstrap/scss/bootstrap";
 body {
-  background-color: #f4f7f6; 
+  font-family: 'Inter', sans-serif;
+}
+
+
+a {
+  color: $primary;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    color: darken($primary, 10%);
+    text-decoration: none;
+  }
+}
+
+.btn {
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+
+  &:hover {
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.table,
+.list-group-item {
+  background-color: var(--bs-light) !important;
+}
+
+.list-group-item-action {
+  transition: all 0.2s ease-in-out;
+  border-left: 4px solid transparent; 
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 15px rgba($primary, 0.15);
+    border-left: 4px solid $primary; 
+    transform: translateX(5px); 
+    background-color: var(--bs-light) !important; 
+  }
+}
+
+
+.card {
+  border: 1px solid $border-color;
+}
+
+.card-header {
+  background-color: rgba($primary, 0.1); 
+  border-bottom: 1px solid $border-color;
 }

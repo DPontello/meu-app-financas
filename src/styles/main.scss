@@ -1,17 +1,21 @@
 $primary: #00bfa5;
 $secondary: #6c757d;
-$body-bg: #1a1e23; 
-$body-color: #f8f9fa; 
+
+$body-bg: #1a1e23;
+$body-color: #f8f9fa;
+
 $light: #2c323a;
 $dark: #121417;
-$text-muted: #aaa; 
+
+$text-muted: #aaa;
+
 $border-color: #3e444a;
 
 @import "~bootstrap/scss/bootstrap";
+
 body {
   font-family: 'Inter', sans-serif;
 }
-
 
 a {
   color: $primary;
@@ -26,39 +30,48 @@ a {
 
 .btn {
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    transform: translateY(-2px); 
+    transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
 }
 
-.table,
 .list-group-item {
   background-color: var(--bs-light) !important;
-  color: var(--bs-body-color);
+}
+
+.table {
+  --bs-table-color: var(--bs-body-color);
+  --bs-table-bg: var(--bs-light);
+  --bs-table-border-color: var(--bs-border-color);
+
+  --bs-table-striped-bg: #{darken($light, 3%)};
+  --bs-table-striped-color: var(--bs-body-color);
+
+  --bs-table-hover-bg: #{darken($light, 5%)};
+  --bs-table-hover-color: var(--bs-body-color);
 }
 
 .list-group-item-action {
   transition: all 0.2s ease-in-out;
-  border-left: 4px solid transparent; 
+  border-left: 4px solid transparent;
 
   &:hover,
   &:focus {
     box-shadow: 0 0 15px rgba($primary, 0.15);
-    border-left: 4px solid $primary; 
-    transform: translateX(5px); 
-    background-color: var(--bs-light) !important; 
+    border-left: 4px solid $primary;
+    transform: translateX(5px);
+    background-color: var(--bs-light) !important;
   }
 }
-
 
 .card {
   border: 1px solid $border-color;
 }
 
 .card-header {
-  background-color: rgba($primary, 0.1); 
+  background-color: rgba($primary, 0.1);
   border-bottom: 1px solid $border-color;
 }
